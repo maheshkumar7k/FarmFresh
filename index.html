@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FarmFresh connects local farmers with customers looking for fresh fruits, vegetables and daily essentials.">
+  <title>FarmFresh | From Farm to Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="FarmFresh home" onclick="showHome();return false;">
+      <span class="brand-icon">🌱</span><span>Farm<span class="brand-green">Fresh</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#products" onclick="showHome()">Shop</a>
+      <a href="#how-it-works">How it works</a>
+      <button class="nav-button" onclick="openAuth('seller')">Sell with us</button>
+      <button class="cart-button" onclick="openCart()">🛒 Cart <span id="cart-count">0</span></button>
+    </nav>
+  </header>
+
+  <main id="home-view">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">FRESH FROM LOCAL FARMS</span>
+        <h1>Good food.<br><span>Good roots.</span></h1>
+        <p>Shop farm-fresh fruits, vegetables and everyday essentials—while supporting the farmers who grow them.</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#products">Shop fresh produce <span>→</span></a>
+          <button class="secondary-button" onclick="openAuth('seller')">I'm a farmer</button>
+        </div>
+        <div class="hero-trust"><span>✓</span> Know your farmer <span>✓</span> Seasonal produce <span>✓</span> Fair prices</div>
+      </div>
+      <div class="hero-image" role="img" aria-label="Fresh fruits and vegetables">
+        <div class="floating-note"><span>🥬</span><div><strong>Fresh picks</strong><small>Selected with care</small></div></div>
+      </div>
+    </section>
+
+    <section class="benefits" id="how-it-works">
+      <div><span class="benefit-icon">🌾</span><div><strong>Closer to the farm</strong><small>Discover local growers</small></div></div>
+      <div><span class="benefit-icon">🥕</span><div><strong>Fresh everyday</strong><small>Seasonal fruits and veg</small></div></div>
+      <div><span class="benefit-icon">🤝</span><div><strong>Support farmers</strong><small>Help local communities</small></div></div>
+    </section>
+
+    <section class="shop-section" id="products">
+      <div class="section-heading">
+        <div><span class="eyebrow">THE FARMERS' HARVEST</span><h2>Fresh finds for you</h2><p>Simple ingredients for happier meals.</p></div>
+        <label class="search-wrap"><span>⌕</span><input id="search-input" type="search" placeholder="Search products..." oninput="renderProducts()"></label>
+      </div>
+      <div class="category-tabs" id="category-tabs">
+        <button class="category-tab active" data-category="All" onclick="setCategory('All',this)">All products</button>
+        <button class="category-tab" data-category="Vegetables" onclick="setCategory('Vegetables',this)">🥦 Vegetables</button>
+        <button class="category-tab" data-category="Fruits" onclick="setCategory('Fruits',this)">🍎 Fruits</button>
+        <button class="category-tab" data-category="Daily Needs" onclick="setCategory('Daily Needs',this)">🥛 Daily needs</button>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+      <p class="demo-note">Demo store: sample products and prices are shown for learning purposes.</p>
+    </section>
+
+    <section class="farmer-banner">
+      <div><span class="eyebrow">GROW WITH US</span><h2>You're growing good things.<br>Let's bring them to more homes.</h2><p>Join FarmFresh and showcase your harvest to customers nearby.</p></div>
+      <button class="light-button" onclick="openAuth('seller')">Become a seller →</button>
+    </section>
+  </main>
+
+  <main id="seller-view" class="dashboard hidden">
+    <div class="dashboard-top">
+      <div><span class="eyebrow">FARMER SPACE</span><h1>Seller dashboard</h1><p>Manage your products in one place.</p></div>
+      <button class="secondary-button" onclick="logout()">Log out</button>
+    </div>
+    <div class="dashboard-stats">
+      <div class="stat-card"><span>Products listed</span><strong id="seller-product-count">0</strong></div>
+      <div class="stat-card"><span>Demo orders</span><strong id="seller-order-count">0</strong></div>
+      <div class="stat-card"><span>Seller status</span><strong class="status-text">Demo account</strong></div>
+    </div>
+    <section class="seller-form-card">
+      <h2>Add a product</h2>
+      <form id="product-form">
+        <div class="form-grid">
+          <label>Product name<input name="name" required maxlength="60" placeholder="e.g. Fresh tomatoes"></label>
+          <label>Category<select name="category" required><option value="Vegetables">Vegetables</option><option value="Fruits">Fruits</option><option value="Daily Needs">Daily Needs</option></select></label>
+          <label>Price (₹)<input name="price" type="number" min="1" step="0.5" required placeholder="40"></label>
+          <label>Unit<select name="unit"><option value="kg">per kg</option><option value="piece">per piece</option><option value="pack">per pack</option><option value="litre">per litre</option></select></label>
+          <label class="wide-field">Image URL (optional)<input name="image" type="url" placeholder="https://example.com/product.jpg"></label>
+          <label class="wide-field">Short description<input name="description" maxlength="120" placeholder="Freshly harvested this morning"></label>
+        </div>
+        <button class="primary-button" type="submit">Add product +</button>
+      </form>
+    </section>
+    <section class="seller-products"><h2>Your listed products</h2><div id="seller-product-list"></div></section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="#" onclick="showHome();return false;"><span class="brand-icon">🌱</span>Farm<span class="brand-green">Fresh</span></a><p>Good food starts with good roots.</p><small>Frontend learning project · Demo only</small></footer>
+
+  <div class="modal-backdrop hidden" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="modal">
+      <button class="modal-close" aria-label="Close" onclick="closeModal('auth-modal')">×</button>
+      <div class="modal-mark">🌱</div>
+      <span class="eyebrow">WELCOME TO FARMFRESH</span>
+      <h2 id="auth-title">Welcome back</h2>
+      <p id="auth-subtitle">Choose how you'd like to continue.</p>
+      <div class="role-switch">
+        <button id="buyer-role" class="role-choice active" onclick="chooseRole('buyer')">🛍️ Buyer</button>
+        <button id="seller-role" class="role-choice" onclick="chooseRole('seller')">🌾 Seller</button>
+      </div>
+      <form id="auth-form">
+        <label>Full name<input name="name" required minlength="2" placeholder="Enter your name"></label>
+        <label>Email address<input name="email" type="email" required placeholder="you@example.com"></label>
+        <label>Password<input name="password" type="password" required minlength="4" placeholder="At least 4 characters"></label>
+        <button class="primary-button full-button" type="submit">Continue →</button>
+      </form>
+      <p class="modal-footnote">This is a local demo. Do not use a real password.</p>
+      <p id="auth-message" class="form-message" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="modal cart-modal">
+      <button class="modal-close" aria-label="Close" onclick="closeModal('cart-modal')">×</button>
+      <span class="eyebrow">YOUR BASKET</span><h2 id="cart-title">Shopping cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total"><span>Total</span><strong id="cart-total">₹0</strong></div>
+      <button class="primary-button full-button" onclick="checkout()">Place demo order →</button>
+      <p class="modal-footnote">Checkout is simulated. No payment will be taken.</p>
+      <p id="cart-message" class="form-message" aria-live="polite"></p>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
